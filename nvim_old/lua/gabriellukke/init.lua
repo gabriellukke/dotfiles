@@ -1,3 +1,2 @@
-require("gabriellukke.remap")
 require("gabriellukke.set")
-
+require("gabriellukke.remap")
