@@ -1,7 +1,7 @@
 vim.wo.number = true
 vim.o.relativenumber = true
 vim.o.clipboard = 'unnamedplus' -- Sync clipboard betwee OS and Neovim
-vim.o.wrap = false
+vim.o.wrap = true
 vim.o.linebreak = true
 vim.o.mouse = 'a' -- Enable mouse mode (default: '')
 vim.o.autoindent = true -- Copy indent from current line when starting new one (default: true)

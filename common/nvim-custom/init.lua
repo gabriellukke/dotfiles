@@ -18,8 +18,10 @@ require('lazy').setup {
   require 'plugins.lualine',
   require 'plugins.treesitter',
   require 'plugins.telescope',
+  require 'plugins.harpoon',
   require 'plugins.lazydev',
   require 'plugins.lsp',
-  require 'plugins.lazygit'
+  require 'plugins.cmp',
+  require 'plugins.conform',
+  require 'plugins.lazygit',
 }
-
