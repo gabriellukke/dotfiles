@@ -13,7 +13,22 @@ return {
     { 'j-hui/fidget.nvim', opts = {} },
 
     -- Allows extra capabilities provided by blink.cmp
-    'saghen/blink.cmp',
+    {
+      'saghen/blink.cmp',
+      build = 'cargo build --release', -- precisa de Rust instalado
+      opts = {
+        fuzzy = { implementation = 'prefer_rust' },
+        completion = {
+          accept = { auto_brackets = { enabled = true } },
+          list = {
+            selection = {
+              preselect = false,
+              auto_insert = false,
+            },
+          },
+        },
+      },
+    },
   },
   config = function()
     -- Brief aside: **What is LSP?**
