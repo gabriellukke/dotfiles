@@ -15,19 +15,70 @@ return {
     -- Allows extra capabilities provided by blink.cmp
     {
       'saghen/blink.cmp',
-      build = 'cargo build --release', -- precisa de Rust instalado
-      opts = {
-        fuzzy = { implementation = 'prefer_rust' },
-        completion = {
-          accept = { auto_brackets = { enabled = true } },
-          list = {
-            selection = {
-              preselect = false,
-              auto_insert = false,
-            },
+      build = 'cargo build --release',
+      opts = function()
+        return {
+          keymap = { preset = 'none' },
+          fuzzy = { implementation = 'prefer_rust' },
+          completion = {
+            accept = { auto_brackets = { enabled = true } },
+            list = { selection = { preselect = false, auto_insert = false } },
           },
-        },
-      },
+        }
+      end,
+      config = function(_, opts)
+        local blink = require 'blink.cmp'
+        blink.setup(opts or {})
+
+        pcall(vim.keymap.del, { 'i', 's' }, '<Tab>')
+        pcall(vim.keymap.del, { 'i', 's' }, '<S-Tab>')
+
+        local function has_words_before()
+          local col = vim.fn.col '.' - 1
+          return col > 0 and not vim.fn.getline('.'):sub(col, col):match '%s'
+        end
+        local function feed(keys)
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false)
+        end
+
+        vim.keymap.set({ 'i', 's' }, '<Tab>', function()
+          if blink.is_visible() then
+            blink.select_next()
+          elseif vim.snippet and vim.snippet.active { direction = 1 } then
+            vim.snippet.jump(1)
+          elseif has_words_before() then
+            blink.show()
+          else
+            feed '<Tab>'
+          end
+        end, { silent = true })
+
+        vim.keymap.set({ 'i', 's' }, '<S-Tab>', function()
+          if blink.is_visible() then
+            blink.select_prev()
+          elseif vim.snippet and vim.snippet.active { direction = -1 } then
+            vim.snippet.jump(-1)
+          else
+            feed '<BS>'
+          end
+        end, { silent = true })
+
+        vim.keymap.set({ 'i', 's' }, '<CR>', function()
+          if blink.is_visible() then
+            blink.accept()
+          else
+            return '\r'
+          end
+        end, { expr = true, silent = true })
+
+        vim.keymap.set({ 'i', 's' }, '<C-y>', function()
+          if blink.is_visible() then
+            blink.accept()
+          else
+            return '<C-y>'
+          end
+        end, { expr = true, silent = true })
+      end,
     },
   },
   config = function()
