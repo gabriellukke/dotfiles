@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+hyprctl eval 'hl.monitor({ output = "HDMI-A-1", mode = "3840x2160@60", position = "0x0", scale = 1.5 })'
+hyprctl eval 'hl.monitor({ output = "eDP-1", disabled = true })'
